@@ -1,0 +1,26 @@
+- name: Distributing TLS certs
+  copy:
+    src: "{{ pkistore }}/{{ item }}"
+    dest: "/etc/pki/tls/certs/{{ item }}"
+  with_items:
+    - "{{ mqtt_tls_ca }}"
+    - "{{ mqtt_tls_cert }}"
+
+- name: Distributing TLS key
+  copy:
+    src: "{{ pkistore }}/{{ item }}"
+    dest: "/etc/pki/tls/private/{{ item }}"
+  with_items:
+    - "{{ mqtt_tls_key }}"
+
+- name: Configuring iptables rules
+  include_role:
+    name: iptables
+    tasks_from: "{{ item }}"
+  vars:
+    iptables_policy_name: mqtt-tls
+    iptables_protocol: tcp
+    iptables_port: "8883"
+  with_items:
+    - custom-policy-ipv6
+    - custom-policy

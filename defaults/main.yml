@@ -1,0 +1,28 @@
+# Default variables for mqtt role
+#
+
+# Listening over TLS port 8883
+# If set to False, it will *only* listen on 1883
+# If so we need ca/cert/key files that will be copied over
+mqtt_tls: True
+mqtt_tls_ca: 
+mqtt_tls_cert:
+mqtt_tls_key:
+
+# Where to store persistence 
+mqtt_persistence_dir: /var/lib/mosquitto/
+
+# Topic restrictions/rights
+mqtt_acls:
+  - user: userA
+    pass: userA # will be converted in jinja2
+    topics:
+      - topic: topic1/#
+        right: readwrite
+      - topic: topic2/sub
+        right: read
+  - user: userB
+    pass: userA
+    topics:
+      - topic: topic1/#
+        right: read

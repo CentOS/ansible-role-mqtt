@@ -1,0 +1,50 @@
+# Default task for mqtt role
+
+- name: Installing required packages
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - mosquitto
+
+- name: Ensuring we have a persistence dir
+  file:
+    path: "{{ mqtt_persistence_dir }}"
+    state: directory
+    owner: mosquitto
+    group: mosquitto
+    mode: 0750
+
+- name: Configuring mosquitto
+  template:
+    src: "{{ item }}.j2"
+    dest: "/etc/mosquitto/{{ item }}"
+  notify: restart_mosquitto
+  with_items:
+    - mosquitto.conf
+    - aclfile
+    - pwfile
+
+- include_tasks: tls.yml
+  when: mqtt_tls
+
+- name: Configuring iptables rules
+  include_role:
+    name: iptables
+    tasks_from: "{{ item }}"
+  vars:
+    iptables_policy_name: mqtt
+    iptables_protocol: tcp
+    iptables_port: "1883"
+  with_items:
+    - custom-policy-ipv6
+    - custom-policy
+  when: not mqtt_tls
+
+- name: Ensuring mosquitto is started and enabled
+  service:
+    name: mosquitto
+    state: started
+    enabled: True
+
+

@@ -1,0 +1,16 @@
+# This affects access control for clients with no username.
+topic read $SYS/#
+
+# ACLs coming from Ansible
+{% for acl in mqtt_acls %}
+user {{ acl.user }}
+{% for item in acl.topics %}
+topic {{ item.right }} {{ item.topic }}
+{% endfor %}
+
+{% endfor %}
+
+# This affects all clients.
+pattern write $SYS/broker/connection/%c/state
+
+
