@@ -26,3 +26,8 @@ mqtt_acls:
     topics:
       - topic: topic1/#
         right: read
+# Mqtt patterns, so affecting all clients
+mqtt_acls_patterns:
+  - pattern write $SYS/broker/connection/%c/state
+ 
+        
