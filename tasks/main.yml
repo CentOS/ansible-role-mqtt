@@ -19,6 +19,7 @@
   template:
     src: "{{ item }}.j2"
     dest: "/etc/mosquitto/{{ item }}"
+    mode: 0644
   notify: restart_mosquitto
   with_items:
     - mosquitto.conf
