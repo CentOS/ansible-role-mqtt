@@ -3,6 +3,7 @@
     src: "{{ pkistore }}/{{ item }}"
     dest: "/etc/pki/tls/certs/{{ item }}"
     mode: 0644
+  notify: restart_mosquitto  
   with_items:
     - "{{ mqtt_tls_ca }}"
     - "{{ mqtt_tls_cert }}"
@@ -12,6 +13,7 @@
     src: "{{ pkistore }}/{{ item }}"
     dest: "/etc/pki/tls/private/{{ item }}"
     mode: 0644
+  notify: restart_mosquitto  
   with_items:
     - "{{ mqtt_tls_key }}"
 
