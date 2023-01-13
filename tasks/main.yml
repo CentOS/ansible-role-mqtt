@@ -48,4 +48,18 @@
     state: started
     enabled: True
 
+- block:
+    - name: Configuring zabbix agent
+      include_role:
+        name: zabbix-server
+        tasks_from: agent_config
+      vars:
+        zabbix_templates: "{{ zabbix_mqtt_templates }}"
+        zabbix_groups: "{{ zabbix_mqtt_groups }}"
+  delegate_to: "{{ zabbix_api_srv }}"  
+  tags:
+    - monitoring
+  when: 
+    - zabbix_api_srv is defined
+    - zabbix_monitoring
 

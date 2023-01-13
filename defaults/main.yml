@@ -30,4 +30,9 @@ mqtt_acls:
 mqtt_acls_patterns:
   - pattern write $SYS/broker/connection/%c/state
  
+
+# Zabbix config
+zabbix_mqtt_templates:
+  - Template CentOS MQTT
+zabbix_mqtt_groups: []
         
